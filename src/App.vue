@@ -1,20 +1,12 @@
 <template>
   <div class='container'>
-      <Filters />
-      <Leaderboard />
+      <router-view />
   </div>
 </template>
 
 <script>
-import Filters from './components/Filters.vue';
-import Leaderboard from './components/Leaderboard.vue';
-
 export default {
-  name: 'App',
-  components: {
-    Filters,
-    Leaderboard
-  }
+  name: 'App'
 }
 </script>
 
@@ -69,7 +61,7 @@ table {
 }
 
 body {
-  background-color: #1a2933
+  background-color: #131d13
 }
 
 #app {

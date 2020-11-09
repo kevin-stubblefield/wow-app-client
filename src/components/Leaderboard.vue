@@ -1,17 +1,31 @@
 <template>
     <ul class="leaderboard">
-        <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in entries" :key="entry.id">
-            <div class="rank">{{ entry.rank }}</div>
-            <div class="rating">{{ entry.rating }}</div>
-            <div class="name">{{ entry.name }}</div>
-            <div class="faction">{{ entry.faction }}</div>
-            <div class="race">{{ entry.race }}</div>
+        <li class="entry header">
+            <div class="rank">Rank</div>
+            <div class="rating">Rating</div>
+            <div class="name">Name</div>
+            <div class="faction">Faction</div>
+            <div class="race">Race</div>
             <!--<div class="class">{{ entry.class }}</div>-->
-            <div class="spec">{{ entry.spec }}</div>
+            <div class="spec">Spec</div>
             <!--<div class="played">{{ entry.played }}</div>-->
-            <div class="won">{{ entry.won }}</div>
-            <div class="lost">{{ entry.lost }}</div>
+            <div class="won">Won</div>
+            <div class="lost">Lost</div>
         </li>
+        <a>
+            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in entries" :key="entry.id">
+                <div class="rank">{{ entry.rank }}</div>
+                <div class="rating">{{ entry.rating }}</div>
+                <div class="name">{{ entry.name }}</div>
+                <div class="faction">{{ entry.faction }}</div>
+                <div class="race">{{ entry.race }}</div>
+                <!--<div class="class">{{ entry.class }}</div>-->
+                <div class="spec">{{ entry.spec }}</div>
+                <!--<div class="played">{{ entry.played }}</div>-->
+                <div class="won">{{ entry.won }}</div>
+                <div class="lost">{{ entry.lost }}</div>
+            </li>
+        </a>
     </ul>
 </template>
 
@@ -57,15 +71,29 @@ export default {
         padding: 1rem;
         border-bottom: 1px solid #ddd;
         display: flex;
-        background-color: #1a2933;
+        background-color: #131d13;
     }
 
     .entry:nth-of-type(2n) {
-        background-color: #263d4d;
+        background-color: #1b291b;
     }
 
     .entry > div {
         flex: 1;
+    }
+
+    .entry.header {
+        border-bottom: none;
+    }
+
+    .entry.header div {
+        font-weight: 700;
+        font-size: 1.25rem;
+    }
+
+    .entry.header .won,
+    .entry.header .lost {
+        color: white;
     }
 
     .death-knight {

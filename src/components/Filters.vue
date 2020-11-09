@@ -1,8 +1,8 @@
 <template>
     <ul>
-        <li v-for='characterClass in classes' :key='characterClass.id'>
-            <input type='checkbox' :id='getCheckboxId(characterClass)' />
-            <label :for='getCheckboxId(characterClass)'><img class='class-icon' :src='getImageName(characterClass)' :alt='characterClass.name' /></label>
+        <li v-for="characterClass in classes" :key="characterClass.id">
+            <input type="checkbox" :id="getCheckboxId(characterClass)" />
+            <label :for="getCheckboxId(characterClass)"><img class="class-icon" :src="getImageName(characterClass)" :alt="characterClass.name" /></label>
         </li>
     </ul>
 </template>
