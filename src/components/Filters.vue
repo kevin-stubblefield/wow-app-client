@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="characterClass in classes" :key="characterClass.id">
-            <input type="checkbox" :id="getCheckboxId(characterClass)" />
+            <input type="checkbox" :value="characterClass.name" :id="getCheckboxId(characterClass)" v-model="checkedClasses" @change="onCheckChanged()" />
             <label :for="getCheckboxId(characterClass)"><img class="class-icon" :src="getImageName(characterClass)" :alt="characterClass.name" /></label>
         </li>
     </ul>
@@ -24,7 +24,9 @@ export default {
                 {id: 10, name: 'Shaman', slug: 'shaman', specs: ['restoration', 'elemental', 'enhancement']},
                 {id: 11, name: 'Warlock', slug: 'warlock', specs: ['demonology', 'affliction', 'destruction']},
                 {id: 12, name: 'Warrior', slug: 'warrior', specs: ['protection', 'fury', 'arms']},
-            ]
+            ],
+            checkedClasses: [],
+            checkedSpecs: [],
         }
     },
 
@@ -33,8 +35,12 @@ export default {
             return 'cb-' + characterClass.slug;
         },
 
-        getImageName(characterClass) {
+        getImageName: function(characterClass) {
             return `/images/class-icons/${characterClass.slug}.jpg`
+        },
+
+        onCheckChanged: function() {
+            this.$emit('filter', { classes: this.checkedClasses, specs: this.checkedSpecs })
         }
     }
 }

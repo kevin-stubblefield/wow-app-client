@@ -1,4 +1,5 @@
 <template>
+    <Filters @filter="filterLeaderboard($event)" />
     <ul class="leaderboard">
         <li class="entry header">
             <div class="rank">Rank</div>
@@ -12,31 +13,36 @@
             <div class="won">Won</div>
             <div class="lost">Lost</div>
         </li>
-        <a>
-            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in entries" :key="entry.id">
-                <div class="rank">{{ entry.rank }}</div>
-                <div class="rating">{{ entry.rating }}</div>
-                <div class="name">{{ entry.name }}</div>
-                <div class="faction">{{ entry.faction }}</div>
-                <div class="race">{{ entry.race }}</div>
-                <!--<div class="class">{{ entry.class }}</div>-->
-                <div class="spec">{{ entry.spec }}</div>
-                <!--<div class="played">{{ entry.played }}</div>-->
-                <div class="won">{{ entry.won }}</div>
-                <div class="lost">{{ entry.lost }}</div>
-            </li>
-        </a>
+        <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in filteredEntries" :key="entry.id">
+            <div class="rank">{{ entry.rank }}</div>
+            <div class="rating">{{ entry.rating }}</div>
+            <div class="name">{{ entry.name }}</div>
+            <div class="faction">{{ entry.faction }}</div>
+            <div class="race">{{ entry.race }}</div>
+            <!--<div class="class">{{ entry.class }}</div>-->
+            <div class="spec">{{ entry.spec }}</div>
+            <!--<div class="played">{{ entry.played }}</div>-->
+            <div class="won">{{ entry.won }}</div>
+            <div class="lost">{{ entry.lost }}</div>
+        </li>
     </ul>
 </template>
 
 <script>
+import Filters from './Filters.vue';
+
 import axios from 'axios';
 
 export default {
+    components: {
+        Filters,
+    },
+
     data: function() {
         return {
             bracket: '2v2',
-            entries: []
+            entries: [],
+            filteredEntries: []
         };
     },
 
@@ -49,6 +55,7 @@ export default {
             axios.get(`https://localhost:3000/api/leaderboard/${this.bracket}`)
                 .then(response => {
                     this.entries = response.data;
+                    this.filteredEntries = response.data;
                 })
                 .catch(err => {
                     console.error(err);
@@ -57,6 +64,17 @@ export default {
 
         getEntryClassStyle: function(entry) {
             return entry.class.toLowerCase().split(' ').join('-');
+        },
+
+        filterLeaderboard: function(filter) {
+            if (filter.classes.length == 0 && filter.specs.length == 0) {
+                this.filteredEntries = this.entries;
+                return;
+            }
+
+            this.filteredEntries = this.entries.filter(value => {
+                return filter.classes.includes(value.class);
+            });
         }
     }
 }
