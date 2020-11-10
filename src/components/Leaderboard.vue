@@ -1,15 +1,16 @@
 <template>
     <Filters @filter="filterLeaderboard($event)" />
-    <ul class="leaderboard">
+    <Loader v-if="isLoading" />
+    <ul v-else class="leaderboard">
         <li class="entry header">
             <div class="rank">Rank</div>
             <div class="rating">Rating</div>
             <div class="name">Name</div>
             <div class="faction">Faction</div>
             <div class="race">Race</div>
-            <!--<div class="class">{{ entry.class }}</div>-->
+            <!--<div class="class">Class</div>-->
             <div class="spec">Spec</div>
-            <!--<div class="played">{{ entry.played }}</div>-->
+            <!--<div class="played">Played</div>-->
             <div class="won">Won</div>
             <div class="lost">Lost</div>
         </li>
@@ -30,19 +31,22 @@
 
 <script>
 import Filters from './Filters.vue';
+import Loader from './Loader.vue';
 
 import axios from 'axios';
 
 export default {
     components: {
         Filters,
+        Loader,
     },
 
     data: function() {
         return {
             bracket: '2v2',
+            isLoading: true,
             entries: [],
-            filteredEntries: []
+            filteredEntries: [],
         };
     },
 
@@ -56,6 +60,7 @@ export default {
                 .then(response => {
                     this.entries = response.data;
                     this.filteredEntries = response.data;
+                    this.isLoading = false;
                 })
                 .catch(err => {
                     console.error(err);
@@ -67,14 +72,20 @@ export default {
         },
 
         filterLeaderboard: function(filter) {
+            this.isLoading = true;
             if (filter.classes.length == 0 && filter.specs.length == 0) {
                 this.filteredEntries = this.entries;
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 200);
                 return;
             }
 
             this.filteredEntries = this.entries.filter(value => {
                 return filter.classes.includes(value.class);
             });
+            
+            this.isLoading = false;
         }
     }
 }
