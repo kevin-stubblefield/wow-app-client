@@ -1,11 +1,18 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Home from '@/components/Home.vue';
+import CharacterDetail from '@/components/CharacterDetail.vue';
 
 const routes = [
     {
-        route: '/',
+        path: '/',
         name: 'Home',
         component: Home
+    },
+    {
+        path: '/character/:realm/:name',
+        name: 'CharacterDetail',
+        component: CharacterDetail,
+        props: true
     }
 ];
 

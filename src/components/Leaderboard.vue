@@ -1,32 +1,34 @@
 <template>
-    <Filters @filter="filterLeaderboard($event)" />
-    <Loader v-if="isLoading" />
-    <ul v-else class="leaderboard">
-        <li class="entry header">
-            <div class="rank">Rank</div>
-            <div class="rating">Rating</div>
-            <div class="name">Name</div>
-            <div class="faction">Faction</div>
-            <div class="race">Race</div>
-            <!--<div class="class">Class</div>-->
-            <div class="spec">Spec</div>
-            <!--<div class="played">Played</div>-->
-            <div class="won">Won</div>
-            <div class="lost">Lost</div>
-        </li>
-        <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in filteredEntries" :key="entry.id">
-            <div class="rank">{{ entry.rank }}</div>
-            <div class="rating">{{ entry.rating }}</div>
-            <div class="name">{{ entry.name }}</div>
-            <div class="faction">{{ entry.faction }}</div>
-            <div class="race">{{ entry.race }}</div>
-            <!--<div class="class">{{ entry.class }}</div>-->
-            <div class="spec">{{ entry.spec }}</div>
-            <!--<div class="played">{{ entry.played }}</div>-->
-            <div class="won">{{ entry.won }}</div>
-            <div class="lost">{{ entry.lost }}</div>
-        </li>
-    </ul>
+    <div class="container">
+        <Filters @filter="filterLeaderboard($event)" />
+        <Loader v-if="isLoading" />
+        <ul v-else class="leaderboard">
+            <li class="entry header">
+                <div class="rank">Rank</div>
+                <div class="rating">Rating</div>
+                <div class="name">Name</div>
+                <div class="faction">Faction</div>
+                <div class="race">Race</div>
+                <!--<div class="class">Class</div>-->
+                <div class="spec">Spec</div>
+                <!--<div class="played">Played</div>-->
+                <div class="won">Won</div>
+                <div class="lost">Lost</div>
+            </li>
+            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in filteredEntries" :key="entry.id" @click="goToCharacterDetail(entry.realm_slug, entry.name)">
+                <div class="rank">{{ entry.rank }}</div>
+                <div class="rating">{{ entry.rating }}</div>
+                <div class="name">{{ entry.name }}</div>
+                <div class="faction">{{ entry.faction }}</div>
+                <div class="race">{{ entry.race }}</div>
+                <!--<div class="class">{{ entry.class }}</div>-->
+                <div class="spec">{{ entry.spec }}</div>
+                <!--<div class="played">{{ entry.played }}</div>-->
+                <div class="won">{{ entry.won }}</div>
+                <div class="lost">{{ entry.lost }}</div>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
@@ -86,6 +88,10 @@ export default {
             });
             
             this.isLoading = false;
+        },
+
+        goToCharacterDetail: function(realmSlug, characterName) {
+            this.$router.push({ name: 'CharacterDetail', params: { realm: realmSlug, name: characterName } });
         }
     }
 }
@@ -101,6 +107,14 @@ export default {
         border-bottom: 1px solid #ddd;
         display: flex;
         background-color: #131d13;
+    }
+
+    .header ~ .entry {
+        cursor: pointer;
+    }
+
+    .header ~ .entry:hover {
+        background-color: #334133;
     }
 
     .entry:nth-of-type(2n) {
