@@ -12,7 +12,7 @@ export default {
 :root {
 	--main-bg-color: #101110;
 	--offset-row-bg-color: #181a18;
-	--row-hover-bg-color: #334133;
+	--row-hover-bg-color: #3b3f3b;
 }
 
 * {
