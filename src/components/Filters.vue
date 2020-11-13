@@ -1,10 +1,12 @@
 <template>
-    <ul>
-        <li v-for="characterClass in classes" :key="characterClass.id">
-            <input type="checkbox" :value="characterClass.name" :id="getCheckboxId(characterClass)" v-model="checkedClasses" @change="onCheckChanged()" />
-            <label :for="getCheckboxId(characterClass)"><img class="class-icon" :src="getImageName(characterClass)" :alt="characterClass.name" /></label>
-        </li>
-    </ul>
+    <section class="filters">
+        <ul>
+            <li v-for="characterClass in classes" :key="characterClass.id">
+                <input type="checkbox" :value="characterClass.name" :id="getCheckboxId(characterClass)" v-model="checkedClasses" @change="onCheckChanged()" />
+                <label :for="getCheckboxId(characterClass)"><img class="class-icon" :src="getImageName(characterClass)" :alt="characterClass.name" /></label>
+            </li>
+        </ul>
+    </section>
 </template>
 
 <script>
@@ -53,6 +55,8 @@ ul {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    height: 100px;
+    background-color: var(--main-bg-color);
 }
 
 input[type='checkbox'][id^='cb'] {
@@ -66,9 +70,20 @@ label {
 .class-icon {
     border: 2px solid gold;
     border-radius: 50%;
+    transition: 100ms ease-in;
+}
+
+.class-icon:hover {
+    transform: scale(0.95);
 }
 
 :checked + label > .class-icon {
     border-color: green;
+}
+
+.filters {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
 }
 </style>

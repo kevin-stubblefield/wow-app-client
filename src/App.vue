@@ -9,6 +9,12 @@ export default {
 </script>
 
 <style>
+:root {
+	--main-bg-color: #101110;
+	--offset-row-bg-color: #181a18;
+	--row-hover-bg-color: #334133;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -16,7 +22,7 @@ export default {
 }
 
 body {
-  background-color: #131d13
+  background-color: var(--main-bg-color);
 }
 
 #app {

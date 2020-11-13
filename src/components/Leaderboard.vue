@@ -106,7 +106,7 @@ export default {
         padding: 1rem;
         border-bottom: 1px solid #ddd;
         display: flex;
-        background-color: #131d13;
+        background-color: var(--main-bg-color);
     }
 
     .header ~ .entry {
@@ -114,11 +114,11 @@ export default {
     }
 
     .header ~ .entry:hover {
-        background-color: #334133;
+        background-color: var(--row-hover-bg-color);
     }
 
     .entry:nth-of-type(2n) {
-        background-color: #1b291b;
+        background-color: var(--offset-row-bg-color);
     }
 
     .entry > div {
@@ -127,6 +127,9 @@ export default {
 
     .entry.header {
         border-bottom: none;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 100px;
     }
 
     .entry.header div {
