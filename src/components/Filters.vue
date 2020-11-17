@@ -107,10 +107,4 @@ label {
 :checked + label > .class-icon {
     border-color: green;
 }
-
-.filters {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-}
 </style>

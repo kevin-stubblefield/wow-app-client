@@ -10,7 +10,7 @@ export default {
 
 <style>
 :root {
-  --primary-font: #ddd;
+  --primary-font: #fff;
 	--primary-bg: #1D1D1D;
 	--secondary-bg: #292929;
 	--row-hover: #353535;
@@ -18,7 +18,7 @@ export default {
   --select-text: var(--primary-font);
   --select-bg-top: #101110;
   --select-bg-bottom: #181a18;
-  --select-hover: #ddd;
+  --select-hover: #fff;
   --option-text: #101110;
 }
 
@@ -42,5 +42,6 @@ body {
 .container {
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
 }
 </style>

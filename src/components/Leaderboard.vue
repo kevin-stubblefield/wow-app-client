@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <div v-show="showToTop" @click="backToTop" class="to-top"><p>Back To Top</p></div>
         <select class="select" v-model="bracket" @change="fetchLeaderboard">
             <option value="2v2" selected>2v2 Arenas</option>
             <option value="3v3">3v3 Arenas</option>
@@ -54,9 +55,18 @@ export default {
             limit: 50,
             offset: 0,
             isLoading: true,
+            showToTop: false,
             entries: [],
             filter: { classes: [], specs: []},
         };
+    },
+
+    created: function() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+
+    unmounted: function() {
+        window.removeEventListener('scroll', this.handleScroll);
     },
 
     mounted: function() {
@@ -96,6 +106,20 @@ export default {
 
         goToCharacterDetail: function(realmSlug, characterName) {
             this.$router.push({ name: 'CharacterDetail', params: { realm: realmSlug, name: characterName } });
+        },
+
+        handleScroll: function() {
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
+                this.showToTop = true;
+            } else {
+                this.showToTop = false;
+            }
+        },
+
+        backToTop: function() {
+            window.scrollTo({
+                top: 0, left: 0, behavior: 'smooth'
+            });
         }
     }
 }
@@ -104,6 +128,25 @@ export default {
 <style scoped>
     .leaderboard {
         list-style: none;
+    }
+
+    .to-top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+        width: 75px;
+        height: 75px;
+        border-radius: 5px;
+        background-color: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+    }
+
+    .to-top:hover {
+        background-color: rgba(0, 0, 0, 0.75);
     }
 
     .entry {
@@ -133,7 +176,7 @@ export default {
         border-bottom: none;
         position: -webkit-sticky;
         position: sticky;
-        top: 100px;
+        top: 0;
     }
 
     .entry.header div {
@@ -222,10 +265,10 @@ export default {
     }
 
     .won {
-        color: greenyellow;
+        color: #81c784;
     }
 
     .lost {
-        color: red;
+        color: #e57373;
     }
 </style>
