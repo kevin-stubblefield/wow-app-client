@@ -10,9 +10,16 @@ export default {
 
 <style>
 :root {
-	--main-bg-color: #101110;
-	--offset-row-bg-color: #181a18;
-	--row-hover-bg-color: #3b3f3b;
+  --primary-font: #ddd;
+	--primary-bg: #1D1D1D;
+	--secondary-bg: #292929;
+	--row-hover: #353535;
+  --select-border: #bbb;
+  --select-text: var(--primary-font);
+  --select-bg-top: #101110;
+  --select-bg-bottom: #181a18;
+  --select-hover: #ddd;
+  --option-text: #101110;
 }
 
 * {
@@ -22,14 +29,14 @@ export default {
 }
 
 body {
-  background-color: var(--main-bg-color);
+  background-color: var(--primary-bg);
 }
 
 #app {
   font-family: 'Poppins', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #ddd;
+  color: var(--primary-font);
 }
 
 .container {

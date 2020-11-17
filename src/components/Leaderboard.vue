@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+        <select class="select" v-model="bracket" @change="fetchLeaderboard">
+            <option value="2v2" selected>2v2 Arenas</option>
+            <option value="3v3">3v3 Arenas</option>
+            <option value="rbg">Rated Battlegrounds</option>
+        </select>
         <Filters @filter="filterLeaderboard($event)" />
         <Loader v-if="isLoading" />
         <ul v-else class="leaderboard">
@@ -15,7 +20,7 @@
                 <div class="won">Won</div>
                 <div class="lost">Lost</div>
             </li>
-            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in filteredEntries" :key="entry.id" @click="goToCharacterDetail(entry.realm_slug, entry.name)">
+            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in entries" :key="entry.id" @click="goToCharacterDetail(entry.realm_slug, entry.name)">
                 <div class="rank">{{ entry.rank }}</div>
                 <div class="rating">{{ entry.rating }}</div>
                 <div class="name">{{ entry.name }}</div>
@@ -46,9 +51,11 @@ export default {
     data: function() {
         return {
             bracket: '2v2',
+            limit: 50,
+            offset: 0,
             isLoading: true,
             entries: [],
-            filteredEntries: [],
+            filter: { classes: [], specs: []},
         };
     },
 
@@ -58,15 +65,7 @@ export default {
 
     methods: {
         fetchLeaderboard: function() {
-            axios.get(`https://localhost:3000/api/leaderboard/${this.bracket}`)
-                .then(response => {
-                    this.entries = response.data;
-                    this.filteredEntries = response.data;
-                    this.isLoading = false;
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            this.filterLeaderboard(this.filter);
         },
 
         getEntryClassStyle: function(entry) {
@@ -75,19 +74,24 @@ export default {
 
         filterLeaderboard: function(filter) {
             this.isLoading = true;
-            if (filter.classes.length == 0 && filter.specs.length == 0) {
-                this.filteredEntries = this.entries;
-                setTimeout(() => {
-                    this.isLoading = false;
-                }, 200);
-                return;
+            this.filter = filter;
+            let url = `https://localhost:3000/leaderboard/${this.bracket}?limit=${this.limit}&offset=${this.offset}`;
+            if (this.filter.classes.length > 0) {
+                url += '&';
+                url += this.filter.classes.map(c => `class=${c}`).join('&');
             }
-
-            this.filteredEntries = this.entries.filter(value => {
-                return filter.classes.includes(value.class);
-            });
+            if (this.filter.specs.length > 0) {
+                url += '&';
+                url += this.filter.specs.map(s => `spec=${s}`).join('&');
+            }
             
-            this.isLoading = false;
+            axios.get(url).then(response => {
+                this.entries = response.data;
+                this.isLoading = false;
+            })
+            .catch(err => {
+                console.error(err);
+            });
         },
 
         goToCharacterDetail: function(realmSlug, characterName) {
@@ -106,7 +110,7 @@ export default {
         padding: 1rem;
         border-bottom: 1px solid #ddd;
         display: flex;
-        background-color: var(--main-bg-color);
+        background-color: var(--primary-bg);
     }
 
     .header ~ .entry {
@@ -114,11 +118,11 @@ export default {
     }
 
     .header ~ .entry:hover {
-        background-color: var(--row-hover-bg-color);
+        background-color: var(--row-hover);
     }
 
     .entry:nth-of-type(2n) {
-        background-color: var(--offset-row-bg-color);
+        background-color: var(--secondary-bg);
     }
 
     .entry > div {
@@ -140,6 +144,33 @@ export default {
     .entry.header .won,
     .entry.header .lost {
         color: white;
+    }
+
+    .select {
+        position: relative;
+        cursor: pointer;
+        line-height: 1.1;
+        padding: 0.5rem 0.75rem;
+        margin-top: .5rem;
+        font-size: 16px;
+        font-family: inherit;
+        color: inherit;
+        width: 100%;
+        max-width: 100%;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23DDDDDD%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+        background-repeat: no-repeat, repeat;
+        background-position: right .7em top 50%, 0 0;
+        background-size: .65em auto, 100%;
+        background-color: var(--primary-bg);
+        border: 1px solid var(--select-border);
+        border-radius: 5px;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .select:hover {
+        border-color: var(--select-hover);
     }
 
     .death-knight {
