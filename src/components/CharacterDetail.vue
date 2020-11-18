@@ -1,6 +1,12 @@
 <template>
 	<h2>{{ character.name }}</h2>
 	<h3>{{ character.realm }}</h3>
+
+	<ul>
+		<li v-for="item in character.equipped" :key="item.id">
+			<span>{{ item.slot }}: {{ item.name }}</span>
+		</li>
+	</ul>
 </template>
 
 <script>
