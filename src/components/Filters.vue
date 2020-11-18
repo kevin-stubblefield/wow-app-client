@@ -97,7 +97,7 @@ label {
 .class-icon {
     border: 2px solid gold;
     border-radius: 50%;
-    transition: 100ms ease-in;
+    transition: 200ms ease-in-out;
 }
 
 .class-icon:hover {

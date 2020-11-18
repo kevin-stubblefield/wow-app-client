@@ -1,6 +1,8 @@
 <template>
     <div class="container">
-        <div v-show="showToTop" @click="backToTop" class="to-top"><p>Back To Top</p></div>
+        <transition name="fade">
+            <div v-show="showToTop" @click="backToTop" class="to-top"><p>Back To Top</p></div>
+        </transition>
         <select class="select" v-model="bracket" @change="onLeaderboardChanged">
             <option value="2v2" selected>2v2 Arenas</option>
             <option value="3v3">3v3 Arenas</option>
@@ -119,7 +121,7 @@ export default {
         },
 
         handleScroll: function() {
-            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 this.showToTop = true;
             } else {
                 this.showToTop = false;
@@ -159,10 +161,20 @@ export default {
         border-radius: 5px;
         background-color: rgba(0, 0, 0, 0.5);
         cursor: pointer;
+        transition: background-color .2s ease-in;
     }
 
     .to-top:hover {
         background-color: rgba(0, 0, 0, 0.75);
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .3s, transform .3s;
+    }
+
+    .fade-enter-from, .fade-leave-to {
+        opacity: 0;
+        transform: translateY(20px);
     }
 
     .entry {
@@ -226,6 +238,7 @@ export default {
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
+        transition: border-color .2s;
     }
 
     .select:hover {
