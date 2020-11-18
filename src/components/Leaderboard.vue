@@ -117,7 +117,7 @@ export default {
         },
 
         goToCharacterDetail: function(realmSlug, characterName) {
-            this.$router.push({ name: 'CharacterDetail', params: { realm: realmSlug, name: characterName } });
+            this.$router.push({ path: `/character/${realmSlug}/${characterName}`});
         },
 
         handleScroll: function() {

@@ -5,12 +5,10 @@ import CharacterDetail from '@/components/CharacterDetail.vue';
 const routes = [
     {
         path: '/',
-        name: 'Home',
         component: Home
     },
     {
         path: '/character/:realm/:name',
-        name: 'CharacterDetail',
         component: CharacterDetail,
         props: true
     }
