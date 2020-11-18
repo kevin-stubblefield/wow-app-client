@@ -1,14 +1,14 @@
 <template>
     <div class="container">
         <div v-show="showToTop" @click="backToTop" class="to-top"><p>Back To Top</p></div>
-        <select class="select" v-model="bracket" @change="fetchLeaderboard">
+        <select class="select" v-model="bracket" @change="onLeaderboardChanged">
             <option value="2v2" selected>2v2 Arenas</option>
             <option value="3v3">3v3 Arenas</option>
             <option value="rbg">Rated Battlegrounds</option>
         </select>
-        <Filters @filter="filterLeaderboard($event)" />
-        <Loader v-if="isLoading" />
-        <ul v-else class="leaderboard">
+        <Filters @filter="onFilterChanged($event)" />
+        <Loader v-show="isLoading" />
+        <ul v-show="!isLoading" class="leaderboard" ref="entries">
             <li class="entry header">
                 <div class="rank">Rank</div>
                 <div class="rating">Rating</div>
@@ -41,6 +41,7 @@
 import Filters from './Filters.vue';
 import Loader from './Loader.vue';
 
+import _ from 'lodash';
 import axios from 'axios';
 
 export default {
@@ -54,15 +55,11 @@ export default {
             bracket: '2v2',
             limit: 50,
             offset: 0,
-            isLoading: true,
+            isLoading: false,
             showToTop: false,
             entries: [],
             filter: { classes: [], specs: []},
         };
-    },
-
-    created: function() {
-        window.addEventListener('scroll', this.handleScroll);
     },
 
     unmounted: function() {
@@ -71,11 +68,13 @@ export default {
 
     mounted: function() {
         this.fetchLeaderboard();
+        window.addEventListener('scroll', _.throttle(this.handleScroll, 300));
     },
 
     methods: {
         fetchLeaderboard: function() {
             this.filterLeaderboard(this.filter);
+            this.offset += this.limit;
         },
 
         getEntryClassStyle: function(entry) {
@@ -83,7 +82,6 @@ export default {
         },
 
         filterLeaderboard: function(filter) {
-            this.isLoading = true;
             this.filter = filter;
             let url = `https://localhost:3000/leaderboard/${this.bracket}?limit=${this.limit}&offset=${this.offset}`;
             if (this.filter.classes.length > 0) {
@@ -96,12 +94,24 @@ export default {
             }
             
             axios.get(url).then(response => {
-                this.entries = response.data;
-                this.isLoading = false;
+                this.entries.push(...response.data);
             })
             .catch(err => {
                 console.error(err);
             });
+        },
+
+        onFilterChanged: function(filter) {
+            this.offset = 0;
+            this.entries = [];
+            this.filter = filter;
+            this.fetchLeaderboard();
+        },
+
+        onLeaderboardChanged: function() {
+            this.offset = 0;
+            this.entries = [];
+            this.fetchLeaderboard();
         },
 
         goToCharacterDetail: function(realmSlug, characterName) {
@@ -113,6 +123,12 @@ export default {
                 this.showToTop = true;
             } else {
                 this.showToTop = false;
+            }
+
+            // console.log(this.$refs.entries.scrollHeight - (window.scrollY + window.innerHeight));
+
+            if (this.$refs.entries.scrollHeight - (window.scrollY + window.innerHeight) <= 600) {
+                this.fetchLeaderboard();
             }
         },
 
