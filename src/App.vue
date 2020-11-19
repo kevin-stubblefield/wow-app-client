@@ -4,7 +4,24 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+
+  mounted: function() {
+    this.setupWowhead();
+  },
+  
+  methods: {
+		setupWowhead: function() {
+			let script = document.createElement('script');
+			script.setAttribute('src', '/wowhead.js');
+
+			let externalScript = document.createElement('script');
+			externalScript.setAttribute('src', 'https://wow.zamimg.com/widgets/power.js');
+
+			document.head.appendChild(script);
+			document.head.appendChild(externalScript);
+		},
+  }
 }
 </script>
 

@@ -23,17 +23,21 @@
                 <div class="won">Won</div>
                 <div class="lost">Lost</div>
             </li>
-            <li class="entry" :class="[getEntryClassStyle(entry)]" v-for="entry in entries" :key="entry.id" @click="goToCharacterDetail(entry.realm_slug, entry.name)">
-                <div class="rank">{{ entry.rank }}</div>
-                <div class="rating">{{ entry.rating }}</div>
-                <div class="name">{{ entry.name }}</div>
-                <div class="faction">{{ entry.faction }}</div>
-                <div class="race">{{ entry.race }}</div>
-                <!--<div class="class">{{ entry.class }}</div>-->
-                <div class="spec">{{ entry.spec }}</div>
-                <!--<div class="played">{{ entry.played }}</div>-->
-                <div class="won">{{ entry.won }}</div>
-                <div class="lost">{{ entry.lost }}</div>
+            <li v-for="entry in entries" :key="entry.id">
+                <a :href="$router.resolve({ path: `/character/${entry.realm_slug}/${entry.name}`}).href">
+                    <div class="entry" :class="[getEntryClassStyle(entry)]">
+                        <div class="rank">{{ entry.rank }}</div>
+                        <div class="rating">{{ entry.rating }}</div>
+                        <div class="name">{{ entry.name }}</div>
+                        <div class="faction">{{ entry.faction }}</div>
+                        <div class="race">{{ entry.race }}</div>
+                        <!--<div class="class">{{ entry.class }}</div>-->
+                        <div class="spec">{{ entry.spec }}</div>
+                        <!--<div class="played">{{ entry.played }}</div>-->
+                        <div class="won">{{ entry.won }}</div>
+                        <div class="lost">{{ entry.lost }}</div>
+                    </div>
+                </a>
             </li>
         </ul>
     </div>
@@ -117,7 +121,8 @@ export default {
         },
 
         goToCharacterDetail: function(realmSlug, characterName) {
-            this.$router.push({ path: `/character/${realmSlug}/${characterName}`});
+            const routeData = this.$router.resolve({ path: `/character/${realmSlug}/${characterName}`});
+            window.open(routeData.href, '_self');
         },
 
         handleScroll: function() {
@@ -177,23 +182,19 @@ export default {
         transform: translateY(20px);
     }
 
+    .header ~ li > a > .entry {
+        cursor: pointer;
+    }
+
+    .header ~ li > a > .entry:hover {
+        background-color: var(--row-hover);
+    }
+
     .entry {
         padding: 1rem;
         border-bottom: 1px solid #ddd;
         display: flex;
         background-color: var(--primary-bg);
-    }
-
-    .header ~ .entry {
-        cursor: pointer;
-    }
-
-    .header ~ .entry:hover {
-        background-color: var(--row-hover);
-    }
-
-    .entry:nth-of-type(2n) {
-        background-color: var(--secondary-bg);
     }
 
     .entry > div {
