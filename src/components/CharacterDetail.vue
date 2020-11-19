@@ -4,7 +4,7 @@
 
 	<ul>
 		<li v-for="item in character.equipped" :key="item.id">
-			<span>{{ item.slot }}: {{ item.name }}</span>
+			<span>{{ item.slot }}: <a :href="`https://www.wowhead.com/item=${item.id}`" :data-wowhead="`bonus=${item.bonuses}`">{{ item.name }}</a></span>
 		</li>
 	</ul>
 </template>
@@ -26,6 +26,15 @@ export default {
 
 	mounted: function() {
 		this.fetchCharacter();
+
+		let script = document.createElement('script');
+		script.setAttribute('src', '/wowhead.js');
+
+		let externalScript = document.createElement('script');
+		externalScript.setAttribute('src', 'https://wow.zamimg.com/widgets/power.js');
+
+		document.head.appendChild(script);
+		document.head.appendChild(externalScript);
 	},
 
 	methods: {
@@ -44,5 +53,7 @@ export default {
 </script>
 
 <style>
-
+a {
+	text-decoration: none;
+}
 </style>
